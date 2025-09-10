@@ -30,6 +30,10 @@ def speak(text):
 
 
 url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=aac1b86e06944ce3a91d5f1cbff0983d"
+base_url = "http://api.openweathermap.org/data/2.5/weather"
+WAPI_KEY = "38f817ec120706b59a26d965335865b5"
+city = "Kolkata"
+w_url = f"{base_url}?q={city}&appid={WAPI_KEY}&units=metric"
 
 def ai_process(command):
     client = genai.Client(
@@ -108,7 +112,23 @@ def process_command(c):
                 
         else: 
             speak(f"Failed to fetch the news. Error code {response.status_code}")
-    
+    elif "weather" in c.lower():
+        response = requests.get(w_url) 
+        data = response.json()      
+        if response.status_code == 200:
+            main = data['main']
+            weather = data['weather'][0]['description']
+            temp = main['temp']
+            feels_like = main['feels_like']
+            humidity = main['humidity']
+            speak(f"weather in {city}: {weather}")
+            print(f"weather in {city}: {weather}")
+            speak(f"Temperature: {temp}°C (feels like {feels_like}°C)")
+            print(f"Temperature: {temp}°C (feels like {feels_like}°C)")
+            speak(f"humidity: {humidity}")
+            print(f"humidity: {humidity}")
+        else:
+            speak(f"sorry failed to give the weather details, error code:{response.status_code}")
     elif "remind me" in c.lower():
         try:
             # Example: "remind me to drink water in 2 minutes"
