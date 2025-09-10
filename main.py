@@ -50,7 +50,7 @@ def ai_process(command):
 
 
 
-def set_reminder(task, time_expression): # Parse natural language time 
+def set_reminder(task, time_expression): 
     reminder_time = dateparser.parse(time_expression) 
     if reminder_time is None:
          speak("Sorry, I couldn't understand the time.") 
@@ -131,19 +131,17 @@ def process_command(c):
             speak(f"sorry failed to give the weather details, error code:{response.status_code}")
     elif "remind me" in c.lower():
         try:
-            # Example: "remind me to drink water in 2 minutes"
             words = c.lower().split("remind me to", 1)[1].strip()
             parts = words.split(" in ", 1) if " in " in words else words.split(" at ", 1)
-
             task = parts[0].strip()
             time_expression = parts[1].strip()
-
+            
             set_reminder(task, time_expression)
         except Exception as e:
             speak("Sorry, I couldn't set the reminder. Please try again.")
     
-    else:
-        # let openai handle the request:
+    else:  
+        # let gemini handle the request
         output = ai_process(c)
         speak(output)
 
@@ -168,7 +166,7 @@ def recognize_speech(recognizer, audio):
 if (__name__=="__main__"):
     speak("initializing Trinity....")
 # listen for the wake worg Trinity"
-# obtain audio from the microphone
+
 r = sr.Recognizer()
 while True:
 
@@ -184,10 +182,10 @@ while True:
 
         if word and "trinity" in word.lower():
             print("Trinity active")
-            speak("ya")   #  should now speak
-            # time.sleep(0.3)   # give audio time before reopening mic
+            speak("ya")  
+            # time.sleep(0.3)  
             
-            with sr.Microphone() as source:          # listen for the command
+            with sr.Microphone() as source:       
                 print("Trinity active...listening for command")
                 audio = r.listen(source)
                 command = recognize_speech(r, audio)
