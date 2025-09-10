@@ -20,17 +20,11 @@ def clean_text(text):
     text = text.replace("*", "")
     return text.strip()
 
-"""VOICE"""                                
- #getting details of current voice
- #changing index, changes voices. o for male
- #changing index, changes voices. 1 for female
-'''INITIALIZING SPEECH ENGINE ONCE'''
-
 def speak(text):
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[1].id)  # female voice (check available voices!)
-    cleaned = clean_text(text)  # ✅ clean markdown
+    cleaned = clean_text(text)  # clean markdown
     engine.say(cleaned)
     engine.runAndWait()
 
